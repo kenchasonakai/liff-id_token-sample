@@ -1,0 +1,66 @@
+h1
+  |Profile
+p#iss
+  |iss:
+p#sub
+  |sub:
+P#aud
+  |aud:
+p#exp
+  |exp:
+p#iat
+  |iat:
+p#authTime
+  |auth_time:
+p#nonce
+  |nonce:
+p#amr
+  |amr:
+p#name
+  |name:
+p#picture
+  |picture:
+p#email
+  |email:
+
+javascript:
+  window.onload = function(){
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const iss_field = document.querySelector("#iss")
+    const sub_field = document.querySelector("#sub")
+    const aud_field = document.querySelector("#aud")
+    const exp_field = document.querySelector("#exp")
+    const iat_field = document.querySelector("#iat")
+    const authTime_field = document.querySelector("#authTime")
+    const nonce_field = document.querySelector("#nonce")
+    const amr_field = document.querySelector("#amr")
+    const name_field = document.querySelector("#name")
+    const picture_field = document.querySelector("#picture")
+    const email_field = document.querySelector("#email")
+    liff.init({
+      liffId: "1655381466-modX62Ob"
+    })
+    .then(() => {
+      if (!liff.isLoggedIn()) {
+        liff.login();
+      }
+      const idToken = liff.getIDToken()
+      const body =`idToken=${idToken}`
+      let request = new Request('/users', {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+          'X-CSRF-Token': token
+        },
+        method: 'POST',
+        body: body
+      });
+      fetch(request)
+      .then(response => response.json())
+        .then(data => {
+           console.log(data)
+          })
+    })
+    .catch((err) => {
+      console.log(err.code, err.message);
+    });
+  }
