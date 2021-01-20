@@ -1,5 +1,7 @@
 h1
   |Profile
+button#getProfile
+  |getProfile
 p#iss
   |iss:
 p#sub
@@ -26,6 +28,7 @@ p#email
 javascript:
   window.onload = function(){
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const getProfileButton = document.querySelector("#getProfile")
     const iss_field = document.querySelector("#iss")
     const sub_field = document.querySelector("#sub")
     const aud_field = document.querySelector("#aud")
@@ -44,8 +47,14 @@ javascript:
       if (!liff.isLoggedIn()) {
         liff.login();
       }
-      const idToken = liff.getIDToken()
-      const body =`idToken=${idToken}`
+    })
+    .catch((err) => {
+      console.log(err.code, err.message);
+    });
+
+    getProfileButton.addEventListener('click', () => {
+      let idToken = liff.getIDToken()
+      let body =`idToken=${idToken}`
       let request = new Request('/users', {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -58,9 +67,18 @@ javascript:
       .then(response => response.json())
         .then(data => {
            console.log(data)
+           iss_field.append(data.iss)
+           sub_field.append(data.sub)
+           aud_field.append(data.aud)
+           exp_field.append(data.exp)
+           iat_field.append(data.iat)
+           authTime_field.append(data.auth_time)
+           nonce_field.append(data.nonce)
+           amr_field.append(data.amr)
+           name_field.append(data.name)
+           picture_field.append(data.picture)
+           email_field.append(data.email)
           })
+
     })
-    .catch((err) => {
-      console.log(err.code, err.message);
-    });
   }
