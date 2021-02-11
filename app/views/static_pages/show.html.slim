@@ -1,0 +1,44 @@
+h1
+  |LT会サンプルアプリへようこそ
+
+h2#showprofile
+h3
+  |liff.getProfile()の取得情報は以下です
+div
+  |consoleにも取得情報を表示してます
+ul
+  li#displayName
+  li#pictureUrl
+  li#statusMessage
+  li#userId
+
+
+javascript:
+  window.addEventListener("turbolinks:load", () => {
+    const profileArea = document.querySelector("#showprofile")
+    const displayName = document.querySelector("#displayName")
+    const pictureUrl = document.querySelector("#pictureUrl")
+    const statusMessage = document.querySelector("#statusMessage")
+    const userId = document.querySelector("#userId")
+    liff.init({
+      liffId: "1655660496-AV1XB890"
+    })
+    .then(() => {
+      if (!liff.isLoggedIn()) {
+        liff.login("https://82b0699814ac.ngrok.io");
+      }
+    })
+    .catch((err) => {
+      console.log(err.code, err.message);
+    });
+
+    liff.getProfile()
+    .then(data => {
+      profileArea.innerHTML = `ようこそ${data.displayName}さん`
+      displayName.innerHTML = `displayName: ${data.displayName}`
+      pictureUrl.innerHTML = `pictureUrl: ${data.pictureUrl}`
+      statusMessage.innerHTML = `statusMessage: ${data.statusMessage}`
+      userId.innerHTML = `userId: ${data.userId}`
+      console.log(data)
+    })
+  })
