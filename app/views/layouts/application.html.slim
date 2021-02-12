@@ -3,6 +3,8 @@ html
   head
     title
       | LiffIdTokenSample
+    meta content="width=device-width,initial-scale=1" name="viewport"
+
     script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"
     link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
     = csrf_meta_tags
@@ -13,11 +15,17 @@ html
     .menu-btn
       i.fa.fa-bars aria-hidden="true"
     .menu
-      .menu-item TOP
-      .menu-item ABOUT
-      .menu-item BLOG
-      .menu-item CONTACT
+      .menu-item
+        = link_to "topページ", root_path
+      .menu-item
+        = link_to "getProfileのサンプルページ", getprofiles_path
+      .menu-item
+        = link_to "getIDTokenのサンプルページ", new_idtokens_path
+      .menu-item
+        = link_to "sendMessagesのサンプルページ", new_sendmessages_path
     script crossorigin="anonymous" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" src="https://code.jquery.com/jquery-3.4.1.js"
+    h1
+      |LT会サンプルアプリへようこそ
     = yield
 
     javascript:

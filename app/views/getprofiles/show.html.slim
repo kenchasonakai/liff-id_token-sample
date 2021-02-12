@@ -1,0 +1,54 @@
+h2
+  |liff.getProfile()のサンプルページ
+button#getProfileButton
+  |プロフィール情報の取得
+
+h2#showprofile
+  |ようこそ〇〇さん
+h3#getProfile
+ul
+  li#displayName
+    |displayName:
+  li#pictureUrl
+    |pictureUrl:
+  li#statusMessage
+    |statusMessage:
+  li#userId
+    |userId:
+
+
+javascript:
+  window.addEventListener("turbolinks:load", () => {
+    const profilebutton = document.querySelector("#getProfileButton")
+    const profileArea = document.querySelector("#showprofile")
+    const displayName = document.querySelector("#displayName")
+    const pictureUrl = document.querySelector("#pictureUrl")
+    const statusMessage = document.querySelector("#statusMessage")
+    const userId = document.querySelector("#userId")
+    liff.init({
+      liffId: "1655660496-AV1XB890"
+    })
+    .then(() => {
+      if (!liff.isLoggedIn()) {
+        liff.login();
+      }
+    })
+    .catch((err) => {
+      console.log(err.code, err.message);
+    });
+
+    liff.ready.then(() => {
+      profilebutton.addEventListener("click", () => {
+        liff.getProfile()
+        .then(data => {
+          profileArea.innerHTML = `ようこそ${data.displayName}さん`
+          displayName.innerHTML = `displayName: ${data.displayName}`
+          pictureUrl.innerHTML = `pictureUrl: ${data.pictureUrl}`
+          statusMessage.innerHTML = `statusMessage: ${data.statusMessage}`
+          userId.innerHTML = `userId: ${data.userId}`
+          console.log(data)
+        })
+      })
+    })
+
+  })

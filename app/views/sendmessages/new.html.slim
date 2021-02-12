@@ -1,0 +1,43 @@
+h2
+  |liff.sendMessages()サンプル
+p
+  |LINEのトーク画面で開いている時のみ使えます
+p
+  input type="text" id="name" name="name"
+button#sendmessagebutton
+  |メッセージ送信
+javascript:
+  window.addEventListener("turbolinks:load", () => {
+    const inputmessage = document.querySelector("#name")
+    const sendmessagebutton = document.querySelector("#sendmessagebutton")
+    liff.init({
+      liffId: "1655660496-AV1XB890"
+    })
+    .then(() => {
+      if (!liff.isLoggedIn()) {
+        liff.login();
+      }
+    })
+    .catch((err) => {
+      console.log(err.code, err.message);
+    });
+
+    liff.ready.then(() => {
+      sendmessagebutton.addEventListener("click", () => {
+        let message = inputmessage.value
+        liff.sendMessages([
+          {
+            type: 'text',
+            text: message
+          }
+        ])
+        .then(() => {
+          console.log('message sent');
+        })
+        .catch((err) => {
+          console.log('error', err);
+        });
+      })
+    })
+
+  })

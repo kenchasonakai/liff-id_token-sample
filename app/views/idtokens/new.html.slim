@@ -1,63 +1,58 @@
-h1
-  |Profile
+h2
+  |getIDToken()のサンプルページ
 button#getProfile
-  |getProfile
-p#iss
-  |iss:
-p#sub
-  |sub:
-P#aud
-  |aud:
-p#exp
-  |exp:
-p#iat
-  |iat:
-p#authTime
-  |auth_time:
-p#nonce
-  |nonce:
-p#amr
-  |amr:
-p#name
-  |name:
-p#picture
-  |picture:
-p#email
-  |email:
+  |getIDTokenを取得してサーバーに送る
+p#idtoken
+  |IDToken:
+ul
+  |IDTokenをLINEに送って返ってきた値
+  li#iss
+    |iss:
+  li#sub
+    |sub:
+  li#aud
+    |aud:
+  li#exp
+    |exp:
+  li#iat
+    |iat:
+  li#amr
+    |amr:
+  li#name
+    |name:
+  li#picture
+    |picture:
 
 javascript:
   window.addEventListener("turbolinks:load", () => {
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const getProfileButton = document.querySelector("#getProfile")
+    const idtoken_field = document.querySelector("#idtoken")
     const iss_field = document.querySelector("#iss")
     const sub_field = document.querySelector("#sub")
     const aud_field = document.querySelector("#aud")
     const exp_field = document.querySelector("#exp")
     const iat_field = document.querySelector("#iat")
-    const authTime_field = document.querySelector("#authTime")
-    const nonce_field = document.querySelector("#nonce")
     const amr_field = document.querySelector("#amr")
     const name_field = document.querySelector("#name")
     const picture_field = document.querySelector("#picture")
-    const email_field = document.querySelector("#email")
     liff.init({
       liffId: "1655660496-AV1XB890"
     })
     .then(() => {
       if (!liff.isLoggedIn()) {
-        liff.login("https://82b0699814ac.ngrok.io");
+        liff.login();
       }
     })
     .catch((err) => {
       console.log(err.code, err.message);
     });
-
-    console.log(liff.getProfile())
-
-    getProfileButton.addEventListener('click', () => {
+    liff.ready.then(() => {
+      getProfileButton.addEventListener('click', () => {
       let idToken = liff.getIDToken()
+      idtoken_field.innerHTML = `IDToken: ${idToken}`
       let body =`idToken=${idToken}`
-      let request = new Request('/idtokens/new', {
+      let request = new Request('/idtokens', {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
           'X-CSRF-Token': token
@@ -69,18 +64,16 @@ javascript:
       .then(response => response.json())
         .then(data => {
            console.log(data)
-           iss_field.append(data.iss)
-           sub_field.append(data.sub)
-           aud_field.append(data.aud)
-           exp_field.append(data.exp)
-           iat_field.append(data.iat)
-           authTime_field.append(data.auth_time)
-           nonce_field.append(data.nonce)
-           amr_field.append(data.amr)
-           name_field.append(data.name)
-           picture_field.append(data.picture)
-           email_field.append(data.email)
-          })
+           iss_field.innerHTML = `iss: ${data.iss}`
+           sub_field.innerHTML = `sub: ${data.sub}`
+           aud_field.innerHTML = `aud: ${data.aud}`
+           exp_field.innerHTML = `exp: ${data.exp}`
+           iat_field.innerHTML = `iat: ${data.iat}`
+           amr_field.innerHTML = `amr: ${data.amr}`
+           name_field.innerHTML = `name: ${data.name}`
+           picture_field.innerHTML = `picture: ${data.picture}`
+        })
+      })
 
     })
   })

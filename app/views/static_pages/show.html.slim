@@ -1,44 +1,37 @@
-h1
-  |LT会サンプルアプリへようこそ
-
-h2#showprofile
+h2
+  |LIFFのセットアップについて(どちらか選択)
 h3
-  |liff.getProfile()の取得情報は以下です
-div
-  |consoleにも取得情報を表示してます
-ul
-  li#displayName
-  li#pictureUrl
-  li#statusMessage
-  li#userId
+  |LIFFSDKを読み込む方法(こっちの方が簡単で常に最新版が使える)
+h4
+  |下記CDNを書く
+p
+  |&lt;script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"&gt;&lt;/script&gt;
 
+h3
+  |npmパッケージを利用する方法
+h4
+  |npmインストール
+p
+  |$ npm install --save @line/liff
+h4
+  |下記コードをJavaScriptで記述する
+p
+  |import liff from '@line/liff';
+p
+  |liff.init({ liffId: 'myLiffId' });
 
 javascript:
   window.addEventListener("turbolinks:load", () => {
-    const profileArea = document.querySelector("#showprofile")
-    const displayName = document.querySelector("#displayName")
-    const pictureUrl = document.querySelector("#pictureUrl")
-    const statusMessage = document.querySelector("#statusMessage")
-    const userId = document.querySelector("#userId")
     liff.init({
       liffId: "1655660496-AV1XB890"
     })
     .then(() => {
       if (!liff.isLoggedIn()) {
-        liff.login("https://82b0699814ac.ngrok.io");
+        liff.login();
       }
     })
     .catch((err) => {
       console.log(err.code, err.message);
     });
 
-    liff.getProfile()
-    .then(data => {
-      profileArea.innerHTML = `ようこそ${data.displayName}さん`
-      displayName.innerHTML = `displayName: ${data.displayName}`
-      pictureUrl.innerHTML = `pictureUrl: ${data.pictureUrl}`
-      statusMessage.innerHTML = `statusMessage: ${data.statusMessage}`
-      userId.innerHTML = `userId: ${data.userId}`
-      console.log(data)
-    })
   })
