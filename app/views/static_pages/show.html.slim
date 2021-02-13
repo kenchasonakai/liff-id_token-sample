@@ -1,25 +1,5 @@
 h2
-  |LIFFのセットアップについて(どちらか選択)
-h3
-  |LIFFSDKを読み込む方法(こっちの方が簡単で常に最新版が使える)
-h4
-  |下記CDNを書く
-p
-  |&lt;script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"&gt;&lt;/script&gt;
-
-h3
-  |npmパッケージを利用する方法
-h4
-  |npmインストール
-p
-  |$ npm install --save @line/liff
-h4
-  |下記コードをJavaScriptで記述する
-p
-  |import liff from '@line/liff';
-p
-  |liff.init({ liffId: 'myLiffId' });
-
+  |ハンバーガーメニューから機能のお試しができます
 javascript:
   window.addEventListener("turbolinks:load", () => {
     liff.init({
