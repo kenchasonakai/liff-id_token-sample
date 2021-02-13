@@ -1,0 +1,2 @@
+class SharetargetpickersController < ApplicationController
+end

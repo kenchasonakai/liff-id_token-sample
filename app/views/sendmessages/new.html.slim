@@ -32,10 +32,13 @@ javascript:
           }
         ])
         .then(() => {
+          inputmessage.value = ""
           console.log('message sent');
+          alert("メッセージが送信されました")
         })
         .catch((err) => {
           console.log('error', err);
+          alert("メッセージの送信に失敗しました")
         });
       })
     })

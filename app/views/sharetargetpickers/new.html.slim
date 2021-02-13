@@ -1,0 +1,59 @@
+h2
+  |liff.shareTargetPicker()サンプル
+p
+  input type="text" id="name" name="name"
+button#sendsharemessagebutton
+  |メッセージ送信
+javascript:
+  window.addEventListener("turbolinks:load", () => {
+    const inputmessage = document.querySelector("#name")
+    const sendsharemessagebutton = document.querySelector("#sendsharemessagebutton")
+    liff.init({
+      liffId: "1655660496-AV1XB890"
+    })
+    .then(() => {
+      if (!liff.isLoggedIn()) {
+        liff.login();
+      }
+    })
+    .catch((err) => {
+      console.log(err.code, err.message);
+    });
+
+    liff.ready.then(() => {
+      sendsharemessagebutton.addEventListener("click", () => {
+        let message = inputmessage.value
+        if (liff.isApiAvailable('shareTargetPicker')) {
+          liff.shareTargetPicker([
+            {
+              'type': 'text',
+              'text': message
+            }
+          ])
+          .then(function (res) {
+            if (res) {
+              // succeeded in sending a message through TargetPicker
+              inputmessage.value = ""
+              console.log(`[${res.status}] Message sent!`)
+              alert("メッセージが送信されました")
+            } else {
+              const [majorVer, minorVer] = (liff.getLineVersion() || "").split('.');
+              if (parseInt(majorVer) == 10 && parseInt(minorVer) < 11) {
+                // LINE 10.3.0 - 10.10.0
+                // Old LINE will access here regardless of user's action
+                console.log('TargetPicker was opened at least. Whether succeeded to send message is unclear')
+              } else {
+                // LINE 10.11.0 -
+                // sending message canceled
+                console.log('TargetPicker was closed!')
+              }
+            }
+          }).catch(function (error) {
+              // something went wrong before sending a message
+              console.log('something wrong happen')
+          })
+        }
+      })
+    })
+
+  })
